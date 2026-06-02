@@ -50,6 +50,7 @@
     "col_physics": "Physics",
     "col_stack": "Stack",
     "col_region": "Region",
+    "col_stock": "Stock",
     "col_founded": "Est.",
     "col_milestone": "Latest Milestone",
     "col_news": "📰"
@@ -105,6 +106,7 @@
     "col_physics": "物理技術",
     "col_stack": "層級",
     "col_region": "地區",
+    "col_stock": "股價",
     "col_founded": "成立",
     "col_milestone": "最新里程碑",
     "col_news": "📰"

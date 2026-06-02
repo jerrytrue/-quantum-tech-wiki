@@ -452,14 +452,26 @@ body {
 /* Headers must stay on one line — table-layout: fixed otherwise vertical-stacks the letters */
 .vendor-table th { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Column widths — fix the squashed "News" column issue */
+/* Column widths — 8 columns: Company, Physics, Stack, Region, Stock, Est., Milestone, News */
 .vendor-table th:nth-child(1), .vendor-table td:nth-child(1) { width: 16%; }                                          /* Company */
 .vendor-table th:nth-child(2), .vendor-table td:nth-child(2) { width: 16%; }                                          /* Physics */
 .vendor-table th:nth-child(3), .vendor-table td:nth-child(3) { width: 18%; }                                          /* Stack */
 .vendor-table th:nth-child(4), .vendor-table td:nth-child(4) { width: 10%; }                                          /* Region */
-.vendor-table th:nth-child(5), .vendor-table td:nth-child(5) { width: 8%;  text-align: center; white-space: nowrap; } /* Est. */
-.vendor-table th:nth-child(6), .vendor-table td:nth-child(6) { width: 26%; font-size: 12px; color: var(--text-dim); line-height: 1.4; } /* Milestone */
-.vendor-table th:nth-child(7), .vendor-table td:nth-child(7) { width: 6%;  text-align: center; padding-left: 4px; padding-right: 4px; } /* News */
+.vendor-table th:nth-child(5), .vendor-table td:nth-child(5) { width: 6%;  }                                          /* Stock */
+.vendor-table th:nth-child(6), .vendor-table td:nth-child(6) { width: 8%;  text-align: center; white-space: nowrap; } /* Est. */
+.vendor-table th:nth-child(7), .vendor-table td:nth-child(7) { width: 20%; font-size: 12px; color: var(--text-dim); line-height: 1.4; } /* Milestone */
+.vendor-table th:nth-child(8), .vendor-table td:nth-child(8) { width: 6%;  text-align: center; padding-left: 4px; padding-right: 4px; } /* News */
+
+/* Stock price chips */
+.chip-stock {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.chip-stock-up      { background: rgba(41,216,197,0.15); color: var(--accent-2); border: 1px solid rgba(41,216,197,0.3); }
+.chip-stock-down    { background: rgba(255,107,107,0.15); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.3); }
+.chip-stock-loading { background: var(--bg); color: var(--text-dim); border: 1px solid var(--border); }
 
 /* Make chips compact inside the table so multi-tag rows still fit */
 .vendor-table .chip {
