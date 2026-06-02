@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum Vendor Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='80' font-size='80'%3E%E2%9A%9B%3C/text%3E%3C/svg%3E" />
+</head>
+<body data-theme="dark">
+
+  <!-- ============= HEADER ============= -->
+  <header class="header">
+    <div class="header-left">
+      <span class="logo">⚛</span>
+      <div>
+        <h1 data-i18n="title">Quantum Vendor Tracker</h1>
+        <p class="subtitle" data-i18n="subtitle"></p>
+      </div>
+    </div>
+    <div class="header-right">
+      <input type="search" id="search" class="search" data-i18n-placeholder="search" />
+      <div class="view-toggle">
+        <button id="viewCard" class="view-btn active" data-i18n="viewCard" title="Cards">▦</button>
+        <button id="viewTable" class="view-btn" data-i18n="viewTable" title="Table">☰</button>
+      </div>
+      <button id="langToggle" class="icon-btn" title="Language">🌐 <span id="langLabel">中文</span></button>
+      <button id="themeToggle" class="icon-btn" title="Theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- ============= MAIN ============= -->
+  <main class="layout">
+
+    <!-- LEFT SIDEBAR: Filters + RSS -->
+    <aside class="sidebar">
+      <section class="filter-block">
+        <h2 data-i18n="filters">Filters</h2>
+
+        <h3 data-i18n="physics">Physics Technology</h3>
+        <div id="filter-physics" class="filter-group"></div>
+
+        <h3 data-i18n="stack">Stack Level</h3>
+        <div id="filter-stack" class="filter-group"></div>
+
+        <h3 data-i18n="region">Region</h3>
+        <div id="filter-region" class="filter-group"></div>
+
+        <button id="clearFilters" class="clear-btn" data-i18n="clearAll">Clear All</button>
+      </section>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <section class="content">
+      <div class="toolbar">
+        <div class="sort-area">
+          <label data-i18n="sort">Sort</label>
+          <select id="sortSelect">
+            <option value="name" data-i18n="sortName">Name</option>
+            <option value="founded" data-i18n="sortUpdated">Founded</option>
+            <option value="physics" data-i18n="sortPhysics">Physics</option>
+          </select>
+        </div>
+        <div class="count-area">
+          <span id="vendorCount">0</span> <span data-i18n="vendorCount">vendors</span>
+        </div>
+      </div>
+
+      <div id="cardView" class="card-grid"></div>
+      <div id="tableView" class="table-wrap hidden">
+        <table class="vendor-table">
+          <thead>
+            <tr>
+              <th data-sort="name"   data-i18n="col_company">Company</th>
+              <th data-sort="physics" data-i18n="col_physics">Physics</th>
+              <th data-sort="stack"  data-i18n="col_stack">Stack</th>
+              <th data-sort="region" data-i18n="col_region">Region</th>
+              <th data-sort="founded" data-i18n="col_founded">Founded</th>
+              <th data-i18n="col_milestone">Latest Milestone</th>
+              <th data-i18n="col_news">News</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <p id="noResults" class="no-results hidden" data-i18n="noResults"></p>
+    </section>
+  </main>
+
+  <!-- ============= BOTTOM: RSS NEWS ============= -->
+  <section class="rss-bottom">
+    <div class="rss-bottom-header">
+      <h2>📡 <span data-i18n="live">Live News</span></h2>
+      <span class="rss-hint" data-i18n="sources">Sources</span>
+    </div>
+    <div id="rssFeed" class="rss-feed">
+      <p class="rss-loading" data-i18n="loadingNews">Loading latest news...</p>
+    </div>
+  </section>
+
+  <!-- ============= FOOTER ============= -->
+  <footer class="footer">
+    <span data-i18n="lastUpdate">Data last updated</span>: <span id="lastUpdated">—</span>
+    &nbsp;·&nbsp; <span id="vendorCountFoot">0</span> <span data-i18n="vendorCount">vendors</span>
+    &nbsp;·&nbsp; <span data-i18n="sources">Sources</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

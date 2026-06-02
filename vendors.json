@@ -1,0 +1,595 @@
+{
+  "lastUpdated": "2026-06-01",
+  "vendors": [
+    {
+      "id": "ibm",
+      "name": "IBM Quantum",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 1980,
+      "hq": "Yorktown Heights, NY, USA",
+      "milestone": {
+        "en": "1,121-qubit Condor (2024), Heron r2 (156q, 2024), Quantum System Two",
+        "zh": "1,121 量子位元 Condor (2024)、Heron r2 (156q, 2024)、Quantum System Two"
+      },
+      "desc": {
+        "en": "Pioneer in superconducting transmon qubits. Operates Qiskit software stack and IBM Quantum Network cloud platform.",
+        "zh": "超導 transmon 量子位元的開創者。經營 Qiskit 軟體堆疊與 IBM Quantum Network 雲端平台。"
+      },
+      "newsQuery": "IBM Quantum",
+      "links": {
+        "site": "https://www.ibm.com/quantum",
+        "roadmap": "https://www.ibm.com/quantum/technology"
+      }
+    },
+    {
+      "id": "google",
+      "name": "Google Quantum AI",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2012,
+      "hq": "Santa Barbara, CA, USA",
+      "milestone": {
+        "en": "Willow chip (105q, 2024) — below-threshold error correction demonstrated",
+        "zh": "Willow 晶片 (105q, 2024) — 展示低於閾值錯誤更正"
+      },
+      "desc": {
+        "en": "Superconducting qubit research with focus on quantum error correction and supremacy benchmarks. Cirq software stack.",
+        "zh": "聚焦量子錯誤更正與量子優越性基準的超導量子位元研究。使用 Cirq 軟體堆疊。"
+      },
+      "newsQuery": "Google Quantum AI",
+      "links": {
+        "site": "https://quantumai.google",
+        "roadmap": "https://quantumai.google/roadmap"
+      }
+    },
+    {
+      "id": "rigetti",
+      "name": "Rigetti Computing",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2013,
+      "hq": "Berkeley, CA, USA",
+      "milestone": {
+        "en": "Ankaa-3 (84q, 2024), modular multi-chip architecture",
+        "zh": "Ankaa-3 (84q, 2024)、模組化多晶片架構"
+      },
+      "desc": {
+        "en": "Public quantum cloud (RIGETTI on NASDAQ). Forest SDK, owns its own fabrication fab.",
+        "zh": "上市量子雲端公司 (NASDAQ: RGTI)。Forest SDK，擁有自有晶圓廠。"
+      },
+      "newsQuery": "Rigetti Computing quantum",
+      "links": {
+        "site": "https://www.rigetti.com"
+      }
+    },
+    {
+      "id": "iqm",
+      "name": "IQM Quantum Computers",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "europe",
+      "founded": 2018,
+      "hq": "Espoo, Finland",
+      "milestone": {
+        "en": "IQM Radiance (54q, 2024), on-premise quantum systems for HPC centers",
+        "zh": "IQM Radiance (54q, 2024)、為 HPC 中心提供 on-premise 量子系統"
+      },
+      "desc": {
+        "en": "Europe's leading superconducting vendor. Specializes in delivering on-premise quantum computers to research labs and supercomputing centers.",
+        "zh": "歐洲領先的超導廠商。專注於交付 on-premise 量子電腦給研究實驗室與超算中心。"
+      },
+      "newsQuery": "IQM quantum computers",
+      "links": {
+        "site": "https://www.meetiqm.com"
+      }
+    },
+    {
+      "id": "oqc",
+      "name": "Oxford Quantum Circuits",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "europe",
+      "founded": 2017,
+      "hq": "Reading, UK",
+      "milestone": {
+        "en": "Toshiko (32q, 2023), Coaxmon proprietary 3D architecture",
+        "zh": "Toshiko (32q, 2023)、Coaxmon 自有 3D 架構"
+      },
+      "desc": {
+        "en": "UK-based superconducting vendor with patented 3D Coaxmon qubit design. Available via Equinix data centers.",
+        "zh": "英國超導廠商，擁有 3D Coaxmon 量子位元專利設計。透過 Equinix 資料中心提供服務。"
+      },
+      "newsQuery": "Oxford Quantum Circuits",
+      "links": {
+        "site": "https://oxfordquantumcircuits.com"
+      }
+    },
+    {
+      "id": "ionq",
+      "name": "IonQ",
+      "physics": "iontrap",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2015,
+      "hq": "College Park, MD, USA",
+      "milestone": {
+        "en": "Forte Enterprise (36 algorithmic qubits, 2024), barium ion roadmap",
+        "zh": "Forte Enterprise (36 algorithmic qubits, 2024)、鋇離子路線圖"
+      },
+      "desc": {
+        "en": "First publicly traded pure-play quantum company (NYSE: IONQ). Trapped ytterbium/barium ion architecture available on AWS Braket, Azure Quantum, GCP.",
+        "zh": "首家上市的純量子公司 (NYSE: IONQ)。鐿/鋇離子阱架構，可透過 AWS Braket、Azure Quantum、GCP 使用。"
+      },
+      "newsQuery": "IonQ quantum",
+      "links": {
+        "site": "https://ionq.com"
+      }
+    },
+    {
+      "id": "quantinuum",
+      "name": "Quantinuum",
+      "physics": "iontrap",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2021,
+      "hq": "Broomfield, CO, USA / Cambridge, UK",
+      "milestone": {
+        "en": "H2-1 (56q, QV 2^21, 2024), highest published quantum volume",
+        "zh": "H2-1 (56q, QV 2^21, 2024)、業界最高公開 quantum volume"
+      },
+      "desc": {
+        "en": "Merger of Honeywell Quantum Solutions and Cambridge Quantum. Industry-leading fidelity. TKET SDK + InQuanto chemistry.",
+        "zh": "Honeywell Quantum Solutions 與 Cambridge Quantum 合併公司。業界領先保真度。TKET SDK + InQuanto 化學模擬。"
+      },
+      "newsQuery": "Quantinuum",
+      "links": {
+        "site": "https://www.quantinuum.com"
+      }
+    },
+    {
+      "id": "oxford-ionics",
+      "name": "Oxford Ionics",
+      "physics": "iontrap",
+      "stack": ["qubit"],
+      "region": "europe",
+      "founded": 2019,
+      "hq": "Oxford, UK",
+      "milestone": {
+        "en": "Electronic Qubit Control trap chips, 99.9992% 1Q gate fidelity (2024)",
+        "zh": "電子式量子位元控制晶片、99.9992% 單量子位元閘保真度 (2024)"
+      },
+      "desc": {
+        "en": "Trapped-ion qubits controlled by integrated electronics on silicon — no lasers for control. Acquired by IonQ (announced 2025).",
+        "zh": "在矽晶片上以整合電子元件控制離子阱量子位元——控制不需雷射。IonQ 已宣布收購 (2025)。"
+      },
+      "newsQuery": "Oxford Ionics",
+      "links": {
+        "site": "https://www.oxionics.com"
+      }
+    },
+    {
+      "id": "aqt",
+      "name": "Alpine Quantum Technologies (AQT)",
+      "physics": "iontrap",
+      "stack": ["full"],
+      "region": "europe",
+      "founded": 2018,
+      "hq": "Innsbruck, Austria",
+      "milestone": {
+        "en": "PINE 24q rack-mount system, calcium ion technology spun out of Innsbruck",
+        "zh": "PINE 24q 機架式系統、源於 Innsbruck 大學的鈣離子技術"
+      },
+      "desc": {
+        "en": "Spin-off from University of Innsbruck (Blatt group). 19-inch rack-mountable ion trap computers.",
+        "zh": "源自 Innsbruck 大學 Blatt 組的衍生公司。19 吋機架可安裝的離子阱電腦。"
+      },
+      "newsQuery": "AQT Alpine Quantum",
+      "links": {
+        "site": "https://www.aqt.eu"
+      }
+    },
+    {
+      "id": "psiquantum",
+      "name": "PsiQuantum",
+      "physics": "photonic",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2016,
+      "hq": "Palo Alto, CA, USA",
+      "milestone": {
+        "en": "1M-qubit fault-tolerant system roadmap, Brisbane & Chicago utility-scale sites announced (2024)",
+        "zh": "百萬量子位元容錯系統路線圖、Brisbane 與 Chicago 規模化站址宣布 (2024)"
+      },
+      "desc": {
+        "en": "Most-funded private quantum company (>$1.5B). Targets fault-tolerant million-qubit photonic system using GlobalFoundries silicon photonics fab.",
+        "zh": "募資最多的私人量子公司 (>$15 億美元)。目標利用 GlobalFoundries 矽光子廠房打造容錯百萬量子位元光子系統。"
+      },
+      "newsQuery": "PsiQuantum",
+      "links": {
+        "site": "https://psiquantum.com"
+      }
+    },
+    {
+      "id": "xanadu",
+      "name": "Xanadu",
+      "physics": "photonic",
+      "stack": ["full"],
+      "region": "canada",
+      "founded": 2016,
+      "hq": "Toronto, Canada",
+      "milestone": {
+        "en": "Borealis (216 squeezed-mode quantum advantage, 2022), Aurora networked photonic system (2024)",
+        "zh": "Borealis (216 squeezed-mode 量子優勢, 2022)、Aurora 網路化光子系統 (2024)"
+      },
+      "desc": {
+        "en": "Continuous-variable photonic quantum computing. PennyLane open-source ML framework. Cloud access via Xanadu Cloud.",
+        "zh": "連續變數光子量子運算。PennyLane 開源 ML 框架。透過 Xanadu Cloud 提供存取。"
+      },
+      "newsQuery": "Xanadu quantum",
+      "links": {
+        "site": "https://www.xanadu.ai"
+      }
+    },
+    {
+      "id": "orca",
+      "name": "ORCA Computing",
+      "physics": "photonic",
+      "stack": ["full"],
+      "region": "europe",
+      "founded": 2019,
+      "hq": "London, UK",
+      "milestone": {
+        "en": "PT-1 room-temperature photonic systems deployed at UK MOD and PSNC (2024)",
+        "zh": "PT-1 室溫光子系統部署於英國國防部與 PSNC (2024)"
+      },
+      "desc": {
+        "en": "Room-temperature photonic systems using quantum memories. Targets near-term ML and optimization applications.",
+        "zh": "使用量子記憶體的室溫光子系統。針對近期 ML 與最佳化應用。"
+      },
+      "newsQuery": "ORCA Computing quantum",
+      "links": {
+        "site": "https://orcacomputing.com"
+      }
+    },
+    {
+      "id": "quera",
+      "name": "QuEra Computing",
+      "physics": "neutralatom",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2018,
+      "hq": "Boston, MA, USA",
+      "milestone": {
+        "en": "Aquila (256-atom, 2022), 48-logical-qubit error-corrected demo (Harvard collab, 2023)",
+        "zh": "Aquila (256 原子, 2022)、48 邏輯量子位元錯誤更正展示 (與 Harvard 合作, 2023)"
+      },
+      "desc": {
+        "en": "Neutral-atom analog/digital systems. Available on AWS Braket. Spin-out from Harvard/MIT (Lukin/Vuletic groups).",
+        "zh": "中性原子類比/數位系統。可透過 AWS Braket 使用。Harvard/MIT (Lukin/Vuletic 組) 衍生公司。"
+      },
+      "newsQuery": "QuEra Computing",
+      "links": {
+        "site": "https://www.quera.com"
+      }
+    },
+    {
+      "id": "atom-computing",
+      "name": "Atom Computing",
+      "physics": "neutralatom",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2018,
+      "hq": "Berkeley, CA, USA",
+      "milestone": {
+        "en": "1,225-site neutral atom array (2023), partnered with Microsoft on logical qubits (2024)",
+        "zh": "1,225 site 中性原子陣列 (2023)、與 Microsoft 合作邏輯量子位元 (2024)"
+      },
+      "desc": {
+        "en": "Strontium neutral atoms with optical clock qubits. First to surpass 1000 atoms. Microsoft partnership for logical qubit demos.",
+        "zh": "使用光學鐘量子位元的鍶中性原子。首家突破 1000 原子的廠商。與 Microsoft 合作展示邏輯量子位元。"
+      },
+      "newsQuery": "Atom Computing",
+      "links": {
+        "site": "https://atom-computing.com"
+      }
+    },
+    {
+      "id": "pasqal",
+      "name": "Pasqal",
+      "physics": "neutralatom",
+      "stack": ["full"],
+      "region": "europe",
+      "founded": 2019,
+      "hq": "Massy, France",
+      "milestone": {
+        "en": "Orion Alpha 100q+ analog system (2024), merger with Qu&Co",
+        "zh": "Orion Alpha 100q+ 類比系統 (2024)、與 Qu&Co 合併"
+      },
+      "desc": {
+        "en": "Neutral atom analog and digital quantum computing. Co-founded by Nobel laureate Alain Aspect. Pulser open-source SDK.",
+        "zh": "中性原子類比與數位量子運算。諾貝爾獎得主 Alain Aspect 共同創辦。Pulser 開源 SDK。"
+      },
+      "newsQuery": "Pasqal quantum",
+      "links": {
+        "site": "https://www.pasqal.com"
+      }
+    },
+    {
+      "id": "infleqtion",
+      "name": "Infleqtion",
+      "physics": "neutralatom",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2007,
+      "hq": "Boulder, CO, USA",
+      "milestone": {
+        "en": "Sqorpius cesium neutral atom system, Superstaq cross-platform compiler",
+        "zh": "Sqorpius 銫中性原子系統、Superstaq 跨平台編譯器"
+      },
+      "desc": {
+        "en": "Formerly ColdQuanta. Neutral atom hardware + quantum software (Superstaq) + sensing (clocks, RF receivers).",
+        "zh": "前身為 ColdQuanta。中性原子硬體 + 量子軟體 (Superstaq) + 感測 (時鐘、射頻接收器)。"
+      },
+      "newsQuery": "Infleqtion quantum",
+      "links": {
+        "site": "https://www.infleqtion.com"
+      }
+    },
+    {
+      "id": "intel",
+      "name": "Intel Quantum",
+      "physics": "siliconspin",
+      "stack": ["qubit"],
+      "region": "usa",
+      "founded": 2015,
+      "hq": "Santa Clara, CA, USA",
+      "milestone": {
+        "en": "Tunnel Falls 12-qubit silicon spin chip (2023), Horse Ridge II cryo-CMOS controller",
+        "zh": "Tunnel Falls 12 量子位元矽自旋晶片 (2023)、Horse Ridge II 低溫 CMOS 控制器"
+      },
+      "desc": {
+        "en": "Silicon spin qubits leveraging 300mm CMOS fab. Quantum SDK and Horse Ridge cryogenic control chips.",
+        "zh": "利用 300mm CMOS 廠房的矽自旋量子位元。Quantum SDK 與 Horse Ridge 低溫控制晶片。"
+      },
+      "newsQuery": "Intel quantum",
+      "links": {
+        "site": "https://www.intel.com/quantum"
+      }
+    },
+    {
+      "id": "diraq",
+      "name": "Diraq",
+      "physics": "siliconspin",
+      "stack": ["qubit"],
+      "region": "asia",
+      "founded": 2022,
+      "hq": "Sydney, Australia",
+      "milestone": {
+        "en": "99%+ 2Q gate fidelity in silicon CMOS spin qubits (2024)",
+        "zh": "矽 CMOS 自旋量子位元 99%+ 雙量子位元閘保真度 (2024)"
+      },
+      "desc": {
+        "en": "UNSW spin-out commercializing silicon CMOS spin qubits. Targets millions of qubits via standard semiconductor manufacturing.",
+        "zh": "UNSW 衍生公司，商業化矽 CMOS 自旋量子位元。目標透過標準半導體製造達到百萬量子位元。"
+      },
+      "newsQuery": "Diraq quantum",
+      "links": {
+        "site": "https://diraq.com"
+      }
+    },
+    {
+      "id": "quantum-motion",
+      "name": "Quantum Motion",
+      "physics": "siliconspin",
+      "stack": ["qubit"],
+      "region": "europe",
+      "founded": 2017,
+      "hq": "London, UK",
+      "milestone": {
+        "en": "First full-stack silicon quantum chip on 300mm CMOS (2024)",
+        "zh": "首個 300mm CMOS 全堆疊矽量子晶片 (2024)"
+      },
+      "desc": {
+        "en": "Silicon spin qubits in standard CMOS, collaborating with foundries to scale.",
+        "zh": "標準 CMOS 中的矽自旋量子位元，與晶圓廠合作擴展。"
+      },
+      "newsQuery": "Quantum Motion silicon",
+      "links": {
+        "site": "https://quantummotion.tech"
+      }
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft Quantum",
+      "physics": "topological",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2005,
+      "hq": "Redmond, WA, USA",
+      "milestone": {
+        "en": "Majorana 1 topological chip (2025), Azure Quantum cloud, Q# language",
+        "zh": "Majorana 1 拓樸晶片 (2025)、Azure Quantum 雲端、Q# 語言"
+      },
+      "desc": {
+        "en": "Topological qubits based on Majorana zero modes. Azure Quantum cloud aggregates hardware from IonQ, Quantinuum, Atom Computing, Rigetti.",
+        "zh": "基於 Majorana zero modes 的拓樸量子位元。Azure Quantum 雲端整合 IonQ、Quantinuum、Atom Computing、Rigetti 的硬體。"
+      },
+      "newsQuery": "Microsoft Quantum Majorana",
+      "links": {
+        "site": "https://azure.microsoft.com/en-us/products/quantum"
+      }
+    },
+    {
+      "id": "quantum-machines",
+      "name": "Quantum Machines",
+      "physics": "agnostic",
+      "stack": ["control"],
+      "region": "asia",
+      "founded": 2018,
+      "hq": "Tel Aviv, Israel",
+      "milestone": {
+        "en": "OPX1000 control platform, NVIDIA DGX Quantum collaboration (2024)",
+        "zh": "OPX1000 控制平台、NVIDIA DGX Quantum 合作 (2024)"
+      },
+      "desc": {
+        "en": "Platform-agnostic quantum control systems (OPX series) and QUA pulse-level language. Used by most superconducting/neutral-atom labs.",
+        "zh": "平台無關的量子控制系統 (OPX 系列) 與 QUA pulse-level 語言。多數超導/中性原子實驗室在用。"
+      },
+      "newsQuery": "Quantum Machines OPX",
+      "links": {
+        "site": "https://www.quantum-machines.co"
+      }
+    },
+    {
+      "id": "zurich-instruments",
+      "name": "Zurich Instruments",
+      "physics": "agnostic",
+      "stack": ["control"],
+      "region": "europe",
+      "founded": 2008,
+      "hq": "Zurich, Switzerland",
+      "milestone": {
+        "en": "SHFQC qubit controller, QCCS scalable control architecture",
+        "zh": "SHFQC 量子位元控制器、QCCS 可擴展控制架構"
+      },
+      "desc": {
+        "en": "Precision quantum control electronics (AWGs, qubit controllers, lock-in amplifiers). LabOne software ecosystem.",
+        "zh": "精密量子控制電子裝置 (AWG、量子位元控制器、鎖相放大器)。LabOne 軟體生態系。"
+      },
+      "newsQuery": "Zurich Instruments quantum",
+      "links": {
+        "site": "https://www.zhinst.com"
+      }
+    },
+    {
+      "id": "qblox",
+      "name": "Qblox",
+      "physics": "agnostic",
+      "stack": ["control"],
+      "region": "europe",
+      "founded": 2020,
+      "hq": "Delft, Netherlands",
+      "milestone": {
+        "en": "Cluster modular control stack, Qblox-QM partnership integrations (2024)",
+        "zh": "Cluster 模組化控制堆疊、Qblox-QM 合作整合 (2024)"
+      },
+      "desc": {
+        "en": "Modular qubit control stack spun out of QuTech (TU Delft). Targets scalable control electronics for 1000+ qubit systems.",
+        "zh": "源自 QuTech (TU Delft) 的模組化量子位元控制堆疊。針對 1000+ 量子位元系統的可擴展控制電子裝置。"
+      },
+      "newsQuery": "Qblox quantum",
+      "links": {
+        "site": "https://www.qblox.com"
+      }
+    },
+    {
+      "id": "bluefors",
+      "name": "Bluefors",
+      "physics": "agnostic",
+      "stack": ["control"],
+      "region": "europe",
+      "founded": 2007,
+      "hq": "Helsinki, Finland",
+      "milestone": {
+        "en": "KIDE platform (large-form-factor dilution refrigerator, 2023), KF and XLDsl series",
+        "zh": "KIDE 平台 (大尺寸稀釋冷凍機, 2023)、KF 與 XLDsl 系列"
+      },
+      "desc": {
+        "en": "Dominant supplier of dilution refrigerators (sub-10mK) used by IBM, Google, and most superconducting/spin qubit labs worldwide.",
+        "zh": "稀釋冷凍機 (sub-10mK) 主要供應商，IBM、Google 及全球多數超導/自旋量子位元實驗室使用。"
+      },
+      "newsQuery": "Bluefors dilution refrigerator",
+      "links": {
+        "site": "https://bluefors.com"
+      }
+    },
+    {
+      "id": "classiq",
+      "name": "Classiq",
+      "physics": "agnostic",
+      "stack": ["software"],
+      "region": "asia",
+      "founded": 2020,
+      "hq": "Tel Aviv, Israel",
+      "milestone": {
+        "en": "Classiq Studio high-level synthesis, Qmod modeling language",
+        "zh": "Classiq Studio 高階綜合、Qmod 建模語言"
+      },
+      "desc": {
+        "en": "High-level quantum algorithm synthesis (analogous to RTL synthesis in classical EDA). Hardware-agnostic, targets all major backends.",
+        "zh": "高階量子演算法綜合 (類比經典 EDA 的 RTL 綜合)。硬體無關，可針對所有主要後端。"
+      },
+      "newsQuery": "Classiq quantum",
+      "links": {
+        "site": "https://www.classiq.io"
+      }
+    },
+    {
+      "id": "qcware",
+      "name": "QC Ware",
+      "physics": "agnostic",
+      "stack": ["software"],
+      "region": "usa",
+      "founded": 2014,
+      "hq": "Palo Alto, CA, USA",
+      "milestone": {
+        "en": "Promethium quantum chemistry platform (2024)",
+        "zh": "Promethium 量子化學平台 (2024)"
+      },
+      "desc": {
+        "en": "Enterprise quantum algorithms and chemistry simulation. Promethium GPU-accelerated chemistry platform with quantum-ready interface.",
+        "zh": "企業級量子演算法與化學模擬。Promethium GPU 加速化學平台，具備量子就緒介面。"
+      },
+      "newsQuery": "QC Ware",
+      "links": {
+        "site": "https://www.qcware.com"
+      }
+    },
+    {
+      "id": "aws-braket",
+      "name": "AWS Braket",
+      "physics": "agnostic",
+      "stack": ["cloud"],
+      "region": "usa",
+      "founded": 2019,
+      "hq": "Seattle, WA, USA",
+      "milestone": {
+        "en": "Hosts IonQ, QuEra, Rigetti, IQM hardware; Braket SDK and hybrid jobs",
+        "zh": "托管 IonQ、QuEra、Rigetti、IQM 硬體；Braket SDK 與混合任務"
+      },
+      "desc": {
+        "en": "Managed quantum cloud service. Multiple hardware providers + simulators + hybrid classical-quantum jobs.",
+        "zh": "託管量子雲端服務。多家硬體提供商 + 模擬器 + 混合古典-量子任務。"
+      },
+      "newsQuery": "AWS Braket quantum",
+      "links": {
+        "site": "https://aws.amazon.com/braket/"
+      }
+    },
+    {
+      "id": "origin-quantum",
+      "name": "Origin Quantum (本源量子)",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "asia",
+      "founded": 2017,
+      "hq": "Hefei, China",
+      "milestone": {
+        "en": "Wuyuan (72q, 2024), OriginQ Cloud platform",
+        "zh": "悟源 (72q, 2024)、本源量子雲平台"
+      },
+      "desc": {
+        "en": "China's leading superconducting quantum vendor. Full stack from chip to OriginQ Cloud, partnerships with Chinese HPC centers.",
+        "zh": "中國領先的超導量子廠商。從晶片到本源量子雲的全堆疊，與中國 HPC 中心合作。"
+      },
+      "newsQuery": "Origin Quantum 本源量子",
+      "links": {
+        "site": "https://originqc.com.cn"
+      }
+    }
+  ]
+}
