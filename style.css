@@ -149,14 +149,37 @@ body {
   position: sticky;
   top: 56px;
 }
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
 .filter-block h2,
 .rss-block h2 {
-  margin: 0 0 10px 0;
+  margin: 0;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-dim);
+}
+.reset-btn {
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.15s;
+}
+.reset-btn:hover {
+  border-color: var(--accent-pink);
+  color: var(--accent-pink);
 }
 .filter-block h3 {
   margin: 18px 0 6px 0;
@@ -191,22 +214,6 @@ body {
   background: var(--bg);
   padding: 1px 6px;
   border-radius: 8px;
-}
-.clear-btn {
-  margin-top: 14px;
-  width: 100%;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 7px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: all 0.15s;
-}
-.clear-btn:hover {
-  border-color: var(--accent-pink);
-  color: var(--accent-pink);
 }
 
 /* ---------- Bottom RSS strip ---------- */

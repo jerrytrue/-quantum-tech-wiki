@@ -253,6 +253,10 @@ function applyLanguage() {
     const val = t(key);
     if (val) el.placeholder = val;
   });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const v = t(el.dataset.i18nTitle);
+    if (v) el.title = v;
+  });
   const langLabel = document.getElementById('langLabel');
   if (langLabel) langLabel.textContent = state.lang === 'en' ? '中文' : 'EN';
 }
