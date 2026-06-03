@@ -14,6 +14,7 @@
     "stack": "Stack Level",
     "region": "Region",
     "clearAll": "Clear All",
+    "reset": "Reset",
     "vendorCount": "vendors",
     "lastUpdate": "Data last updated",
     "sources": "Sources: official sites, arXiv papers, press releases",
@@ -49,6 +50,7 @@
     "col_physics": "Physics",
     "col_stack": "Stack",
     "col_region": "Region",
+    "col_stock": "Stock",
     "col_founded": "Est.",
     "col_milestone": "Latest Milestone",
     "col_news": "📰"
@@ -68,6 +70,7 @@
     "stack": "Stack 層級",
     "region": "地區",
     "clearAll": "清除全部",
+    "reset": "重設",
     "vendorCount": "家廠商",
     "lastUpdate": "資料最後更新",
     "sources": "資料來源：官方網站、arXiv 論文、新聞稿",
@@ -103,6 +106,7 @@
     "col_physics": "物理技術",
     "col_stack": "層級",
     "col_region": "地區",
+    "col_stock": "股價",
     "col_founded": "成立",
     "col_milestone": "最新里程碑",
     "col_news": "📰"

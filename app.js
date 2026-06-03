@@ -12,6 +12,7 @@ const state = {
   search: '',
   sort: 'name',
   lastUpdated: '',
+  stockPrices: {}, // ticker -> {price, pct, error}
 };
 
 const PHYSICS_OPTIONS = ['superconducting','iontrap','photonic','neutralatom','topological','siliconspin','nvcenter','agnostic'];
@@ -45,6 +46,7 @@ async function boot() {
   applyLanguage();
   render();
   loadRSS();
+  loadStockPrices();
 }
 
 /* ---------- Filter UI ---------- */
@@ -170,7 +172,7 @@ function renderCards(list) {
     <article class="vendor-card" data-id="${v.id}">
       <div class="card-header">
         <h3 class="card-name">${v.name}</h3>
-        <div>${v.stack.map(chipForStack).join('')}</div>
+        <div>${v.stack.map(chipForStack).join('')}${stockChip(v.ticker)}</div>
       </div>
       <div class="card-meta-row">
         <span class="chip chip-physics">${t('physics_' + v.physics)}</span>
@@ -196,6 +198,7 @@ function renderTable(list) {
       <td>${t('physics_' + v.physics)}</td>
       <td>${v.stack.map(chipForStack).join(' ')}</td>
       <td>${t('region_' + v.region)}</td>
+      <td>${stockChip(v.ticker)}</td>
       <td>${v.founded}</td>
       <td>${v.milestone[state.lang] || v.milestone.en}</td>
       <td><a href="https://news.google.com/search?q=${encodeURIComponent(v.newsQuery)}" target="_blank" rel="noopener">📰</a></td>
@@ -253,8 +256,89 @@ function applyLanguage() {
     const val = t(key);
     if (val) el.placeholder = val;
   });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const v = t(el.dataset.i18nTitle);
+    if (v) el.title = v;
+  });
   const langLabel = document.getElementById('langLabel');
   if (langLabel) langLabel.textContent = state.lang === 'en' ? '中文' : 'EN';
+}
+
+/* ---------- Stock Prices ---------- */
+async function loadStockPrices() {
+  const CACHE_KEY = 'qvt-stock-cache';
+  const TTL_MS = 5 * 60 * 1000;
+
+  try {
+    const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+    if (cached && Date.now() - cached.timestamp < TTL_MS) {
+      state.stockPrices = cached.prices;
+      render();
+      return;
+    }
+  } catch {}
+
+  const tickers = [...new Set(state.vendors.map(v => v.ticker).filter(Boolean))];
+  const results = {};
+
+  // corsproxy.io is fast (~6ms) and reliable; allorigins.win is fallback but flaky.
+  // 5s timeout per proxy attempt so we don't hang the page.
+  const fetchPrice = async (ticker) => {
+    const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}`;
+    const proxies = [
+      `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
+    ];
+    let lastErr;
+    for (const url of proxies) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 5000);
+      try {
+        const res = await fetch(url, { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (!res.ok) { lastErr = 'http ' + res.status; continue; }
+        const data = await res.json();
+        const meta = data?.chart?.result?.[0]?.meta;
+        if (!meta) { lastErr = 'no meta'; continue; }
+        const price = meta.regularMarketPrice;
+        const prev = meta.chartPreviousClose ?? meta.previousClose;
+        const pct = prev ? ((price - prev) / prev) * 100 : 0;
+        return { price, pct };
+      } catch (e) {
+        clearTimeout(tid);
+        lastErr = e.name === 'AbortError' ? 'timeout' : e.message;
+      }
+    }
+    return { error: true, reason: lastErr };
+  };
+
+  // Sequential with small stagger to avoid tripping proxy rate limits.
+  for (const ticker of tickers) {
+    results[ticker] = await fetchPrice(ticker);
+    // Update UI progressively so users see chips arrive instead of all-at-once.
+    state.stockPrices = { ...results };
+    render();
+    await new Promise(r => setTimeout(r, 150));
+  }
+
+  state.stockPrices = results;
+  // Only cache if at least one ticker succeeded — otherwise we'd freeze the page
+  // on all-errors for 5 min when proxies come back up.
+  const anySuccess = Object.values(results).some(r => !r.error);
+  if (anySuccess) {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), prices: results }));
+  }
+  render();
+}
+
+function stockChip(ticker) {
+  if (!ticker) return '';
+  const sp = state.stockPrices[ticker];
+  if (!sp) return `<span class="chip chip-stock chip-stock-loading">${ticker} —</span>`;
+  if (sp.error) return `<span class="chip chip-stock chip-stock-loading">${ticker} ⚠</span>`;
+  const cls = sp.pct >= 0 ? 'chip-stock-up' : 'chip-stock-down';
+  const sign = sp.pct >= 0 ? '+' : '';
+  return `<span class="chip chip-stock ${cls}">${ticker} $${sp.price.toFixed(2)} ${sign}${sp.pct.toFixed(2)}%</span>`;
 }
 
 /* ---------- RSS (Google News aggregate) ---------- */

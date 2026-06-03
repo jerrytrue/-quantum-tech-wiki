@@ -9,6 +9,7 @@
       "region": "usa",
       "founded": 1980,
       "hq": "Yorktown Heights, NY, USA",
+      "ticker": "IBM",
       "milestone": {
         "en": "1,121-qubit Condor (2024), Heron r2 (156q, 2024), Quantum System Two",
         "zh": "1,121 量子位元 Condor (2024)、Heron r2 (156q, 2024)、Quantum System Two"
@@ -31,6 +32,7 @@
       "region": "usa",
       "founded": 2012,
       "hq": "Santa Barbara, CA, USA",
+      "ticker": "GOOGL",
       "milestone": {
         "en": "Willow chip (105q, 2024) — below-threshold error correction demonstrated",
         "zh": "Willow 晶片 (105q, 2024) — 展示低於閾值錯誤更正"
@@ -53,6 +55,7 @@
       "region": "usa",
       "founded": 2013,
       "hq": "Berkeley, CA, USA",
+      "ticker": "RGTI",
       "milestone": {
         "en": "Ankaa-3 (84q, 2024), modular multi-chip architecture",
         "zh": "Ankaa-3 (84q, 2024)、模組化多晶片架構"
@@ -116,6 +119,7 @@
       "region": "usa",
       "founded": 2015,
       "hq": "College Park, MD, USA",
+      "ticker": "IONQ",
       "milestone": {
         "en": "Forte Enterprise (36 algorithmic qubits, 2024), barium ion roadmap",
         "zh": "Forte Enterprise (36 algorithmic qubits, 2024)、鋇離子路線圖"
@@ -142,8 +146,8 @@
         "zh": "H2-1 (56q, QV 2^21, 2024)、業界最高公開 quantum volume"
       },
       "desc": {
-        "en": "Merger of Honeywell Quantum Solutions and Cambridge Quantum. Industry-leading fidelity. TKET SDK + InQuanto chemistry.",
-        "zh": "Honeywell Quantum Solutions 與 Cambridge Quantum 合併公司。業界領先保真度。TKET SDK + InQuanto 化學模擬。"
+        "en": "Merger of Honeywell Quantum Solutions and Cambridge Quantum. Industry-leading fidelity. TKET SDK + InQuanto chemistry. (Parent Honeywell: NYSE HON.)",
+        "zh": "Honeywell Quantum Solutions 與 Cambridge Quantum 合併公司。業界領先保真度。TKET SDK + InQuanto 化學模擬。（母公司 Honeywell：NYSE HON。）"
       },
       "newsQuery": "Quantinuum",
       "links": {
@@ -347,6 +351,7 @@
       "region": "usa",
       "founded": 2015,
       "hq": "Santa Clara, CA, USA",
+      "ticker": "INTC",
       "milestone": {
         "en": "Tunnel Falls 12-qubit silicon spin chip (2023), Horse Ridge II cryo-CMOS controller",
         "zh": "Tunnel Falls 12 量子位元矽自旋晶片 (2023)、Horse Ridge II 低溫 CMOS 控制器"
@@ -410,6 +415,7 @@
       "region": "usa",
       "founded": 2005,
       "hq": "Redmond, WA, USA",
+      "ticker": "MSFT",
       "milestone": {
         "en": "Majorana 1 topological chip (2025), Azure Quantum cloud, Q# language",
         "zh": "Majorana 1 拓樸晶片 (2025)、Azure Quantum 雲端、Q# 語言"
@@ -569,6 +575,46 @@
       "links": {
         "site": "https://aws.amazon.com/braket/"
       }
+    },
+    {
+      "id": "dwave",
+      "name": "D-Wave Systems",
+      "physics": "superconducting",
+      "stack": ["full"],
+      "region": "canada",
+      "founded": 1999,
+      "hq": "Burnaby, BC, Canada",
+      "ticker": "QBTS",
+      "milestone": {
+        "en": "Advantage2 6,000+ qubit annealer (2025), gate-model roadmap announced",
+        "zh": "Advantage2 6,000+ 量子位元退火機 (2025)、發表閘模型路線圖"
+      },
+      "desc": {
+        "en": "Pioneer in quantum annealing (not gate-model). NYSE: QBTS. Leap cloud service for optimization workloads. Now developing gate-model superconducting systems too.",
+        "zh": "量子退火先驅（非閘模型）。NYSE: QBTS。Leap 雲端服務針對最佳化問題。目前也在開發閘模型超導系統。"
+      },
+      "newsQuery": "D-Wave quantum",
+      "links": { "site": "https://www.dwavesys.com" }
+    },
+    {
+      "id": "qci",
+      "name": "Quantum Computing Inc",
+      "physics": "photonic",
+      "stack": ["full"],
+      "region": "usa",
+      "founded": 2018,
+      "hq": "Hoboken, NJ, USA",
+      "ticker": "QUBT",
+      "milestone": {
+        "en": "Dirac-3 thin-film lithium niobate photonic system (2024)",
+        "zh": "Dirac-3 薄膜鈮酸鋰光子系統 (2024)"
+      },
+      "desc": {
+        "en": "Room-temperature photonic quantum computing for optimization and AI. NASDAQ: QUBT.",
+        "zh": "室溫光子量子運算，針對最佳化與 AI。NASDAQ: QUBT。"
+      },
+      "newsQuery": "Quantum Computing Inc QUBT",
+      "links": { "site": "https://quantumcomputinginc.com" }
     },
     {
       "id": "origin-quantum",
