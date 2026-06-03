@@ -281,26 +281,53 @@ async function loadStockPrices() {
   const tickers = [...new Set(state.vendors.map(v => v.ticker).filter(Boolean))];
   const results = {};
 
-  await Promise.all(tickers.map(async (ticker) => {
-    try {
-      const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}`;
-      const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`;
-      const res = await fetch(proxyUrl);
-      const wrapper = await res.json();
-      const data = JSON.parse(wrapper.contents);
-      const meta = data?.chart?.result?.[0]?.meta;
-      if (!meta) throw new Error('no meta');
-      const price = meta.regularMarketPrice;
-      const prev = meta.chartPreviousClose ?? meta.previousClose;
-      const pct = prev ? ((price - prev) / prev) * 100 : 0;
-      results[ticker] = { price, pct };
-    } catch (e) {
-      results[ticker] = { error: true };
+  // corsproxy.io is fast (~6ms) and reliable; allorigins.win is fallback but flaky.
+  // 5s timeout per proxy attempt so we don't hang the page.
+  const fetchPrice = async (ticker) => {
+    const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}`;
+    const proxies = [
+      `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
+    ];
+    let lastErr;
+    for (const url of proxies) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 5000);
+      try {
+        const res = await fetch(url, { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (!res.ok) { lastErr = 'http ' + res.status; continue; }
+        const data = await res.json();
+        const meta = data?.chart?.result?.[0]?.meta;
+        if (!meta) { lastErr = 'no meta'; continue; }
+        const price = meta.regularMarketPrice;
+        const prev = meta.chartPreviousClose ?? meta.previousClose;
+        const pct = prev ? ((price - prev) / prev) * 100 : 0;
+        return { price, pct };
+      } catch (e) {
+        clearTimeout(tid);
+        lastErr = e.name === 'AbortError' ? 'timeout' : e.message;
+      }
     }
-  }));
+    return { error: true, reason: lastErr };
+  };
+
+  // Sequential with small stagger to avoid tripping proxy rate limits.
+  for (const ticker of tickers) {
+    results[ticker] = await fetchPrice(ticker);
+    // Update UI progressively so users see chips arrive instead of all-at-once.
+    state.stockPrices = { ...results };
+    render();
+    await new Promise(r => setTimeout(r, 150));
+  }
 
   state.stockPrices = results;
-  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), prices: results }));
+  // Only cache if at least one ticker succeeded — otherwise we'd freeze the page
+  // on all-errors for 5 min when proxies come back up.
+  const anySuccess = Object.values(results).some(r => !r.error);
+  if (anySuccess) {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), prices: results }));
+  }
   render();
 }
 
