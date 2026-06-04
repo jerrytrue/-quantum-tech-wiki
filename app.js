@@ -20,7 +20,7 @@ const state = {
 
 const PHYSICS_OPTIONS = ['superconducting','iontrap','photonic','neutralatom','topological','siliconspin','nvcenter','agnostic'];
 const STACK_OPTIONS   = ['full','qubit','control','software','cloud'];
-const REGION_OPTIONS  = ['usa','europe','asia','canada'];
+const REGION_OPTIONS  = ['usa','europe','asia','canada','oceania'];
 const TRADING_OPTIONS = ['public','private'];
 const ERA_OPTIONS     = ['legacy','modern','recent'];
 

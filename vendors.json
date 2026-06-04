@@ -370,7 +370,7 @@
       "name": "Diraq",
       "physics": "siliconspin",
       "stack": ["qubit"],
-      "region": "asia",
+      "region": "oceania",
       "founded": 2022,
       "hq": "Sydney, Australia",
       "milestone": {
@@ -560,7 +560,7 @@
       "name": "Q-CTRL",
       "physics": "agnostic",
       "stack": ["software", "control"],
-      "region": "asia",
+      "region": "oceania",
       "founded": 2017,
       "hq": "Sydney, Australia",
       "milestone": {
