@@ -1,6 +1,14 @@
 # Quantum Vendor Tracker
 
-A bilingual (EN / 中文), single-page directory of quantum computing vendors worldwide. Filter by physics technology, stack level, and region. Card and table views. Live news via Google News RSS.
+A bilingual (EN / 中文), single-page directory of quantum computing vendors worldwide. Filter by physics technology, stack level, and region. Card and table views. Live news via Google News RSS. Live stock prices for publicly traded vendors. Click any physics technology chip for an explanatory modal with diagram and an interactive Bloch sphere.
+
+## Live demo
+
+🌐 <https://jerrytrue.github.io/quantum-com-wiki/>
+
+### Try it on mobile
+
+<img src="qr-code.png" alt="QR code linking to the live site" width="200" />
 
 ## File layout
 
