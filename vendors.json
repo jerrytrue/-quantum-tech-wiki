@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-01",
+  "lastUpdated": "2026-06-04",
   "vendors": [
     {
       "id": "ibm",
@@ -553,6 +553,27 @@
       "newsQuery": "QC Ware",
       "links": {
         "site": "https://www.qcware.com"
+      }
+    },
+    {
+      "id": "qctrl",
+      "name": "Q-CTRL",
+      "physics": "agnostic",
+      "stack": ["software", "control"],
+      "region": "asia",
+      "founded": 2017,
+      "hq": "Sydney, Australia",
+      "milestone": {
+        "en": "Fire Opal performance management, Boulder Opal control suite — error-suppression layer for IBM, IonQ, Rigetti, Quantinuum",
+        "zh": "Fire Opal 效能管理、Boulder Opal 控制套件 — IBM、IonQ、Rigetti、Quantinuum 的錯誤抑制層"
+      },
+      "desc": {
+        "en": "Quantum infrastructure software that characterizes hardware and applies optimized control pulses to suppress errors. Hardware-agnostic — runs on top of every major gate-model platform. Spun out from Michael Biercuk's group at UNSW Sydney.",
+        "zh": "量子基礎建設軟體 — 描繪硬體特性並施加最佳化控制脈衝以抑制錯誤。硬體無關，可在所有主要閘模型平台上運行。源自 UNSW Sydney Michael Biercuk 教授團隊的衍生公司。"
+      },
+      "newsQuery": "Q-CTRL quantum",
+      "links": {
+        "site": "https://q-ctrl.com"
       }
     },
     {
