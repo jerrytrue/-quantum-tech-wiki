@@ -50,8 +50,8 @@
       );
       this.scene.add(sphereLines);
 
-      // Axes (X = pink, Y = teal, Z = purple)
-      const axisLen = 1.35;
+      // Axes (X = pink, Y = teal, Z = purple) — slightly shorter than label distance
+      const axisLen = 1.12;
       const axes = [
         { from: [-axisLen, 0, 0], to: [axisLen, 0, 0], color: 0xff5cb0, label: '+x' },
         { from: [0, -axisLen, 0], to: [0, axisLen, 0], color: 0x29d8c5, label: '+y' },
@@ -65,11 +65,15 @@
         this.scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: a.color })));
       });
 
-      // |0⟩ / |1⟩ labels on the sphere poles using sprites
-      this._addLabel('|0⟩', 0, 0, 1.5, 0x7c5cff);
-      this._addLabel('|1⟩', 0, 0, -1.5, 0x7c5cff);
-      this._addLabel('|+⟩', 1.5, 0, 0, 0xff5cb0);
-      this._addLabel('|+i⟩', 0, 1.5, 0, 0x29d8c5);
+      // Bloch labels. Physics convention: |0⟩ at +Z pole (top), |1⟩ at -Z pole (bottom),
+      // |+⟩ at +X (right), |+i⟩ at +Y (front).
+      // Our mapping is physics (x, y, z) → three.js (x, z, y), so physics +Z is three.js +Y (up).
+      // Use 1.18 distance (just outside sphere of radius 1) so labels don't get clipped by the canvas.
+      const D = 1.18;
+      this._addLabel('|0⟩',  0, D, 0,  0x7c5cff);   // top (physics +Z → three +Y)
+      this._addLabel('|1⟩',  0, -D, 0, 0x7c5cff);   // bottom (physics -Z → three -Y)
+      this._addLabel('|+⟩',  D, 0, 0,  0xff5cb0);   // right (physics +X → three +X)
+      this._addLabel('|+i⟩', 0, 0, D,  0x29d8c5);   // front (physics +Y → three +Z)
 
       // State arrow — starts at |0⟩ pole
       this.arrow = new THREE.ArrowHelper(
@@ -103,7 +107,7 @@
       const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
       const sprite = new THREE.Sprite(mat);
       sprite.position.set(x, y, z);
-      sprite.scale.set(0.4, 0.4, 0.4);
+      sprite.scale.set(0.32, 0.32, 0.32);
       this.scene.add(sprite);
     }
 
