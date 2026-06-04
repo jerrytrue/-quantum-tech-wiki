@@ -10,6 +10,21 @@
   const cMag2 = (z) => z.re*z.re + z.im*z.im;
   const cConj = (z) => ({ re: z.re, im: -z.im });
 
+  // Spherical interpolation between two Vector3s (both should be roughly unit length).
+  function slerpVec(THREE, a, b, t) {
+    let dot = Math.max(-1, Math.min(1, a.dot(b)));
+    if (dot > 0.9995 || dot < -0.9995) {
+      // Nearly identical or antipodal — fall back to linear lerp + renormalize
+      const v = a.clone().lerp(b, t);
+      if (v.length() > 1e-6) v.normalize();
+      return v;
+    }
+    const omega = Math.acos(dot);
+    const sinO = Math.sin(omega);
+    return a.clone().multiplyScalar(Math.sin((1 - t) * omega) / sinO)
+      .add(b.clone().multiplyScalar(Math.sin(t * omega) / sinO));
+  }
+
   class BlochSphere {
     constructor(container) {
       if (!window.THREE) {
@@ -19,8 +34,18 @@
       this.container = container;
       this.alpha = { re: 1, im: 0 };
       this.beta  = { re: 0, im: 0 };
+
+      // Animation state for arrow movement (state updates are instant, arrow lerps).
+      // _displayedDir is what's drawn; _targetDir is the true Bloch direction.
+      this._displayedDir = null;  // initialized after THREE is ready
+      this._targetDir = null;
+      this._targetLen = 1;
+      this._displayedLen = 1;
+      this._animStart = 0;
+      this._animDuration = 450;  // ms
+
       this._initScene();
-      this._render();
+      this._render(/* skipAnimate */ true);  // initial paint with no transition
       this._resizeHandler = () => this._resize();
       window.addEventListener('resize', this._resizeHandler);
     }
@@ -41,21 +66,36 @@
       this.renderer.setClearColor(0x000000, 0);
       this.container.appendChild(this.renderer.domElement);
 
+      // OrbitControls: mouse-drag rotation, auto-rotate when idle, stops on user interaction.
+      if (THREE.OrbitControls) {
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.08;
+        this.controls.enableZoom = false;
+        this.controls.enablePan = false;
+        this.controls.autoRotate = true;
+        this.controls.autoRotateSpeed = 0.6;
+        this.controls.target.set(0, 0, 0);
+        this.controls.addEventListener('start', () => {
+          // First drag → stop auto-rotation, hand control to the user.
+          if (this.controls) this.controls.autoRotate = false;
+        });
+      }
+
       // Wireframe sphere
       const sphereGeo = new THREE.SphereGeometry(1, 28, 18);
       const wireframe = new THREE.WireframeGeometry(sphereGeo);
-      const sphereLines = new THREE.LineSegments(
+      this.scene.add(new THREE.LineSegments(
         wireframe,
         new THREE.LineBasicMaterial({ color: 0x29d8c5, transparent: true, opacity: 0.18 })
-      );
-      this.scene.add(sphereLines);
+      ));
 
       // Axes (X = pink, Y = teal, Z = purple) — slightly shorter than label distance
       const axisLen = 1.12;
       const axes = [
-        { from: [-axisLen, 0, 0], to: [axisLen, 0, 0], color: 0xff5cb0, label: '+x' },
-        { from: [0, -axisLen, 0], to: [0, axisLen, 0], color: 0x29d8c5, label: '+y' },
-        { from: [0, 0, -axisLen], to: [0, 0, axisLen], color: 0x7c5cff, label: '+z' },
+        { from: [-axisLen, 0, 0], to: [axisLen, 0, 0], color: 0xff5cb0 },
+        { from: [0, -axisLen, 0], to: [0, axisLen, 0], color: 0x29d8c5 },
+        { from: [0, 0, -axisLen], to: [0, 0, axisLen], color: 0x7c5cff },
       ];
       axes.forEach(a => {
         const geo = new THREE.BufferGeometry().setFromPoints([
@@ -65,19 +105,16 @@
         this.scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: a.color })));
       });
 
-      // Bloch labels. Physics convention: |0⟩ at +Z pole (top), |1⟩ at -Z pole (bottom),
-      // |+⟩ at +X (right), |+i⟩ at +Y (front).
-      // Our mapping is physics (x, y, z) → three.js (x, z, y), so physics +Z is three.js +Y (up).
-      // Use 1.18 distance (just outside sphere of radius 1) so labels don't get clipped by the canvas.
+      // Bloch labels (physics convention)
       const D = 1.18;
-      this._addLabel('|0⟩',  0, D, 0,  0x7c5cff);   // top (physics +Z → three +Y)
-      this._addLabel('|1⟩',  0, -D, 0, 0x7c5cff);   // bottom (physics -Z → three -Y)
-      this._addLabel('|+⟩',  D, 0, 0,  0xff5cb0);   // right (physics +X → three +X)
-      this._addLabel('|+i⟩', 0, 0, D,  0x29d8c5);   // front (physics +Y → three +Z)
+      this._addLabel('|0⟩',  0, D, 0,  0x7c5cff);
+      this._addLabel('|1⟩',  0, -D, 0, 0x7c5cff);
+      this._addLabel('|+⟩',  D, 0, 0,  0xff5cb0);
+      this._addLabel('|+i⟩', 0, 0, D,  0x29d8c5);
 
-      // State arrow — starts at |0⟩ pole
+      // State arrow
       this.arrow = new THREE.ArrowHelper(
-        new THREE.Vector3(0, 1, 0).normalize(),
+        new THREE.Vector3(0, 1, 0),
         new THREE.Vector3(0, 0, 0),
         1,
         0xff5cb0,
@@ -86,8 +123,10 @@
       );
       this.scene.add(this.arrow);
 
-      // Slow auto-rotation
-      this._theta = Math.PI / 4;
+      // Initialize displayed/target directions to |0⟩ pole
+      this._displayedDir = new THREE.Vector3(0, 1, 0);
+      this._targetDir    = new THREE.Vector3(0, 1, 0);
+
       this._tick = this._tick.bind(this);
       this._tick();
     }
@@ -121,40 +160,64 @@
 
     _tick() {
       if (!this.scene) return;
-      this._theta += 0.003;
-      const r = 3.5;
-      this.camera.position.x = r * Math.cos(this._theta);
-      this.camera.position.z = r * Math.sin(this._theta);
-      this.camera.position.y = 2.2;
-      this.camera.lookAt(0, 0, 0);
+      const THREE = window.THREE;
+
+      // Animate displayed arrow direction toward target via spherical interpolation
+      if (this._animStart > 0 && this._displayedDir && this._targetDir) {
+        const elapsed = performance.now() - this._animStart;
+        const t = Math.min(1, elapsed / this._animDuration);
+        const easeT = 1 - Math.pow(1 - t, 3);  // ease-out cubic
+        this._displayedDir = slerpVec(THREE, this._animFromDir, this._targetDir, easeT);
+        this._displayedLen = this._animFromLen + (this._targetLen - this._animFromLen) * easeT;
+        this.arrow.setDirection(this._displayedDir);
+        this.arrow.setLength(Math.min(this._displayedLen, 1), 0.18, 0.09);
+        if (t >= 1) this._animStart = 0;
+      }
+
+      if (this.controls) this.controls.update();
       this.renderer.render(this.scene, this.camera);
       this._raf = requestAnimationFrame(this._tick);
     }
 
-    // Bloch vector from current state:
-    //   <σx> = 2 Re(α* β),  <σy> = 2 Im(α* β),  <σz> = |α|² − |β|²
+    // Bloch vector from current state.
+    //   ⟨σx⟩ = 2 Re(α* β),  ⟨σy⟩ = 2 Im(α* β),  ⟨σz⟩ = |α|² − |β|²
     _blochVector() {
       const a = this.alpha, b = this.beta;
       const aStarB = cMul(cConj(a), b);
-      return {
-        x: 2 * aStarB.re,
-        y: 2 * aStarB.im,
-        z: cMag2(a) - cMag2(b)
-      };
+      return { x: 2 * aStarB.re, y: 2 * aStarB.im, z: cMag2(a) - cMag2(b) };
     }
 
-    _render() {
+    // Update internal state + kick off animation toward the new Bloch direction.
+    // Pass skipAnimate=true on the very first paint to avoid an initial slide-in.
+    _render(skipAnimate) {
       const THREE = window.THREE;
       const v = this._blochVector();
-      // Map physics-z to three.js +y (z-pole points up in our scene)
-      const dir = new THREE.Vector3(v.x, v.z, v.y);
-      const len = dir.length();
-      if (len > 1e-6) {
-        this.arrow.setDirection(dir.clone().normalize());
-        this.arrow.setLength(Math.min(len, 1), 0.18, 0.09);
+
+      // Map physics (x, y, z) → three.js (x, z, y) so physics +Z is screen up.
+      const newDir = new THREE.Vector3(v.x, v.z, v.y);
+      const newLen = newDir.length();
+      if (newLen > 1e-6) newDir.normalize();
+      else newDir.set(0, 1, 0);
+
+      if (skipAnimate || !this._displayedDir) {
+        this._displayedDir = newDir.clone();
+        this._displayedLen = newLen;
+        if (this.arrow) {
+          this.arrow.setDirection(this._displayedDir);
+          this.arrow.setLength(Math.min(this._displayedLen, 1), 0.18, 0.09);
+        }
+      } else {
+        this._animFromDir = this._displayedDir.clone();
+        this._animFromLen = this._displayedLen;
+        this._targetDir   = newDir;
+        this._targetLen   = newLen;
+        this._animStart   = performance.now();
       }
 
-      // DOM state display
+      this._updateDOM(v);
+    }
+
+    _updateDOM(v) {
       const fmt = (z) => {
         if (Math.abs(z.im) < 1e-4) return z.re.toFixed(3);
         const sign = z.im >= 0 ? '+' : '';
@@ -166,6 +229,18 @@
       if (alphaEl) alphaEl.textContent = fmt(this.alpha);
       if (betaEl)  betaEl.textContent  = fmt(this.beta);
       if (vecEl)   vecEl.textContent = `⟨σ⟩ = (${v.x.toFixed(2)}, ${v.y.toFixed(2)}, ${v.z.toFixed(2)})`;
+
+      // Measurement probabilities
+      const p0 = cMag2(this.alpha);
+      const p1 = cMag2(this.beta);
+      const p0Bar = document.getElementById('blochP0Bar');
+      const p1Bar = document.getElementById('blochP1Bar');
+      const p0Pct = document.getElementById('blochP0Pct');
+      const p1Pct = document.getElementById('blochP1Pct');
+      if (p0Bar) p0Bar.style.width = (p0 * 100).toFixed(1) + '%';
+      if (p1Bar) p1Bar.style.width = (p1 * 100).toFixed(1) + '%';
+      if (p0Pct) p0Pct.textContent = (p0 * 100).toFixed(1) + '%';
+      if (p1Pct) p1Pct.textContent = (p1 * 100).toFixed(1) + '%';
     }
 
     _applyMatrix(m) {
@@ -190,15 +265,32 @@
       if (gates[name]) this._applyMatrix(gates[name]);
     }
 
-    reset() {
-      this.alpha = { re: 1, im: 0 };
-      this.beta  = { re: 0, im: 0 };
+    // Jump to a named preset state.
+    setState(name) {
+      const s2 = 1 / Math.sqrt(2);
+      const map = {
+        '0':  { a: { re: 1, im: 0 },  b: { re: 0,  im: 0 } },
+        '1':  { a: { re: 0, im: 0 },  b: { re: 1,  im: 0 } },
+        '+':  { a: { re: s2, im: 0 }, b: { re: s2, im: 0 } },
+        '-':  { a: { re: s2, im: 0 }, b: { re: -s2, im: 0 } },
+        '+i': { a: { re: s2, im: 0 }, b: { re: 0,  im: s2 } },
+        '-i': { a: { re: s2, im: 0 }, b: { re: 0,  im: -s2 } },
+      };
+      const p = map[name];
+      if (!p) return;
+      this.alpha = p.a;
+      this.beta = p.b;
       this._render();
+    }
+
+    reset() {
+      this.setState('0');
     }
 
     destroy() {
       if (this._raf) cancelAnimationFrame(this._raf);
       if (this._resizeHandler) window.removeEventListener('resize', this._resizeHandler);
+      if (this.controls) { this.controls.dispose(); this.controls = null; }
       if (this.renderer) {
         this.renderer.dispose();
         if (this.renderer.domElement && this.renderer.domElement.parentNode) {

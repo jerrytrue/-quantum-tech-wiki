@@ -154,6 +154,15 @@
           <h3 data-i18n="modal_bloch">Interactive Bloch sphere</h3>
           <p class="bloch-hint" data-i18n="modal_bloch_hint">Apply gates to see how the qubit state rotates. Same math for all physics.</p>
           <div id="blochContainer"></div>
+          <div class="bloch-presets">
+            <span class="bloch-presets-label" data-i18n="bloch_presets">States:</span>
+            <button data-preset="0">|0⟩</button>
+            <button data-preset="1">|1⟩</button>
+            <button data-preset="+">|+⟩</button>
+            <button data-preset="-">|−⟩</button>
+            <button data-preset="+i">|+i⟩</button>
+            <button data-preset="-i">|−i⟩</button>
+          </div>
           <div class="bloch-controls">
             <div class="bloch-gates">
               <button data-gate="X" title="X (NOT) gate">X</button>
@@ -171,13 +180,31 @@
             <span id="blochBeta">0.000</span><span>|1⟩</span>
             <span class="bloch-vec" id="blochVec"></span>
           </div>
+          <div class="bloch-prob">
+            <div class="prob-row">
+              <span class="prob-label">P(|0⟩)</span>
+              <div class="prob-bar-container"><div id="blochP0Bar" class="prob-bar prob-bar-0" style="width:100%"></div></div>
+              <span id="blochP0Pct" class="prob-pct">100.0%</span>
+            </div>
+            <div class="prob-row">
+              <span class="prob-label">P(|1⟩)</span>
+              <div class="prob-bar-container"><div id="blochP1Bar" class="prob-bar prob-bar-1" style="width:0%"></div></div>
+              <span id="blochP1Pct" class="prob-pct">0.0%</span>
+            </div>
+          </div>
+          <p class="bloch-more">
+            <span data-i18n="bloch_more_label">Want to build multi-qubit circuits?</span>
+            <a href="https://algassert.com/quirk" target="_blank" rel="noopener">Quirk ↗</a>
+            <span class="bloch-more-hint" data-i18n="bloch_quirk_hint">— open-source drag-drop circuit builder by Craig Gidney @ Google Quantum AI.</span>
+          </p>
         </div>
       </div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="bloch.js?v=2"></script>
-  <script src="app.js?v=9"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="bloch.js?v=3"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
