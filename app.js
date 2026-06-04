@@ -254,7 +254,19 @@ function getFiltered() {
   }).sort((a, b) => {
     if (state.sort === 'founded') return a.founded - b.founded;
     if (state.sort === 'physics') return a.physics.localeCompare(b.physics);
-    return a.name.localeCompare(b.name);
+    if (state.sort === 'stack')   return (a.stack[0] || '').localeCompare(b.stack[0] || '');
+    if (state.sort === 'region')  return a.region.localeCompare(b.region);
+    if (state.sort === 'ticker' || state.sort === 'stock') {
+      // Sort by % change descending. Vendors without ticker or with errors sink to the bottom.
+      const score = (v) => {
+        const sp = state.stockPrices[v.ticker];
+        if (!v.ticker) return -Infinity;
+        if (!sp || sp.error) return -Infinity;
+        return sp.pct;
+      };
+      return score(b) - score(a);
+    }
+    return a.name.localeCompare(b.name);  // default: by company name
   });
 }
 
