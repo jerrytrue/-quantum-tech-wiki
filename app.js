@@ -180,6 +180,12 @@ function bindEvents() {
         if (state.bloch) state.bloch.gate(btn.dataset.gate);
       });
     });
+    // Wire preset state buttons (|0⟩, |1⟩, |+⟩, |−⟩, |+i⟩, |−i⟩)
+    modal.querySelectorAll('.bloch-presets button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (state.bloch) state.bloch.setState(btn.dataset.preset);
+      });
+    });
     modal.querySelector('.bloch-reset').addEventListener('click', () => {
       if (state.bloch) state.bloch.reset();
     });

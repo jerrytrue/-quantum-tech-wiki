@@ -759,6 +759,107 @@ body {
   font-size: 11px;
 }
 
+/* Preset state buttons */
+.bloch-presets {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 12px 0 10px;
+}
+.bloch-presets-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-right: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.bloch-presets button {
+  padding: 4px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  font-family: ui-monospace, "SF Mono", monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.bloch-presets button:hover {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+  background: rgba(41, 216, 197, 0.08);
+}
+
+/* Measurement probability bars */
+.bloch-prob {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.prob-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: ui-monospace, "SF Mono", monospace;
+  font-size: 11.5px;
+}
+.prob-label {
+  width: 52px;
+  color: var(--text-dim);
+}
+.prob-bar-container {
+  flex: 1;
+  height: 10px;
+  background: var(--bg);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.prob-bar {
+  height: 100%;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.prob-bar-0 { background: linear-gradient(90deg, var(--accent), #9d7fff); }
+.prob-bar-1 { background: linear-gradient(90deg, var(--accent-2), #5dfff0); }
+.prob-pct {
+  width: 56px;
+  text-align: right;
+  color: var(--text);
+}
+
+/* Quirk link */
+.bloch-more {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.bloch-more a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+  margin: 0 4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(124, 92, 255, 0.1);
+  transition: all 0.15s;
+}
+.bloch-more a:hover {
+  background: rgba(124, 92, 255, 0.2);
+  text-decoration: underline;
+}
+.bloch-more-hint {
+  font-size: 11.5px;
+}
+
+/* Bloch container: hint that drag works */
+#blochContainer { cursor: grab; }
+#blochContainer:active { cursor: grabbing; }
+
 /* Modal responsive */
 @media (max-width: 800px) {
   .modal-content { grid-template-columns: 1fr; }
