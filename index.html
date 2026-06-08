@@ -97,6 +97,7 @@
         <table class="vendor-table">
           <thead>
             <tr>
+              <th class="compare-th"></th>
               <th data-sort="name"   data-i18n="col_company">Company</th>
               <th data-sort="physics" data-i18n="col_physics">Physics</th>
               <th data-sort="stack"  data-i18n="col_stack">Stack</th>
@@ -215,6 +216,19 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ============= COMPARE: float button, backdrop, drawer ============= -->
+  <button id="compareFloatBtn" class="compare-float-btn hidden" data-i18n="compare_open">Compare ↗</button>
+
+  <div id="compareBackdrop" class="compare-backdrop hidden"></div>
+
+  <div id="compareDrawer" class="compare-drawer hidden" role="dialog" aria-modal="true">
+    <div class="compare-drawer-header">
+      <h2 id="compareDrawerTitle" data-i18n="compare_drawer_title">Vendor Comparison</h2>
+      <button id="compareDrawerClose" class="compare-drawer-close" data-i18n="compare_close">✕ Close</button>
+    </div>
+    <div id="compareDrawerBody" class="compare-drawer-body"></div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

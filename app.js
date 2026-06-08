@@ -16,6 +16,7 @@ const state = {
   stockPrices: {}, // ticker -> {price, pct, error}
   modalPhysicsKey: null,  // currently-open physics modal key
   bloch: null,            // active BlochSphere instance, or null
+  compare: new Set(),     // vendor ids selected for comparison
 };
 
 const PHYSICS_OPTIONS = ['superconducting','iontrap','photonic','neutralatom','topological','siliconspin','nvcenter','agnostic'];
@@ -72,6 +73,7 @@ async function boot() {
   buildPresets();
   initCollapsibleFilters();
   bindEvents();
+  bindCompareEvents();
   applyLanguage();
   render();
   loadRSS();
@@ -256,6 +258,14 @@ function bindEvents() {
     }
   });
 
+  // Delegated change for compare checkboxes
+  document.body.addEventListener('change', (e) => {
+    if (e.target.classList.contains('compare-cb')) {
+      e.stopPropagation();
+      toggleCompare(e.target.dataset.id);
+    }
+  });
+
   // Modal close: backdrop, close button, Esc
   const modal = document.getElementById('physicsModal');
   if (modal) {
@@ -279,7 +289,10 @@ function bindEvents() {
     });
   }
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && state.modalPhysicsKey) closePhysicsModal();
+    if (e.key === 'Escape') {
+      if (state.modalPhysicsKey) closePhysicsModal();
+      else closeCompareDrawer();
+    }
   });
 }
 
@@ -406,10 +419,15 @@ function chipForStack(stack) {
 function renderCards(list) {
   const grid = document.getElementById('cardView');
   grid.innerHTML = list.map(v => `
-    <article class="vendor-card" data-id="${v.id}">
+    <article class="vendor-card${state.compare.has(v.id) ? ' compare-selected' : ''}" data-id="${v.id}">
       <div class="card-header">
         <h3 class="card-name">${v.name}</h3>
-        <div>${v.stack.map(chipForStack).join('')}${stockChip(v.ticker)}</div>
+        <div class="card-header-right">
+          <label class="compare-checkbox-wrap" title="${t('compare_open') || 'Compare'}">
+            <input type="checkbox" class="compare-cb" data-id="${v.id}"${state.compare.has(v.id) ? ' checked' : ''} />
+          </label>
+          ${v.stack.map(chipForStack).join('')}${stockChip(v.ticker)}
+        </div>
       </div>
       <div class="card-meta-row">
         <span class="chip chip-physics" data-physics="${v.physics}" title="${t('click_physics_hint')}">${t('physics_' + v.physics)}</span>
@@ -429,12 +447,12 @@ function renderCards(list) {
 
 function renderTable(list) {
   const tbody = document.getElementById('tableBody');
-  // Company name links to the vendor's website if available; falls back to plain text.
   const nameCell = (v) => v.links && v.links.site
     ? `<a class="table-name-link" href="${v.links.site}" target="_blank" rel="noopener" title="${v.links.site}">${v.name} <span class="ext-icon">↗</span></a>`
     : v.name;
   tbody.innerHTML = list.map(v => `
-    <tr data-id="${v.id}">
+    <tr data-id="${v.id}"${state.compare.has(v.id) ? ' class="compare-selected"' : ''}>
+      <td class="compare-cb-cell"><input type="checkbox" class="compare-cb" data-id="${v.id}"${state.compare.has(v.id) ? ' checked' : ''} /></td>
       <td class="name">${nameCell(v)}</td>
       <td><span class="chip chip-physics" data-physics="${v.physics}" title="${t('click_physics_hint')}">${t('physics_' + v.physics)}</span></td>
       <td>${v.stack.map(chipForStack).join(' ')}</td>
@@ -680,6 +698,112 @@ function wireRssCarousel() {
     nextBtn.dataset.wired = '1';
     nextBtn.addEventListener('click', () => { rssNext(); startRssTimer(); });
   }
+}
+
+/* ---------- Compare mode ---------- */
+function toggleCompare(vendorId) {
+  if (state.compare.has(vendorId)) {
+    state.compare.delete(vendorId);
+  } else {
+    if (state.compare.size >= 4) return; // max 4
+    state.compare.add(vendorId);
+  }
+  updateCompareButton();
+  // Sync checkbox states in both views
+  document.querySelectorAll(`.compare-cb[data-id="${vendorId}"]`).forEach(cb => {
+    cb.checked = state.compare.has(vendorId);
+  });
+  document.querySelectorAll(`[data-id="${vendorId}"]`).forEach(el => {
+    el.classList.toggle('compare-selected', state.compare.has(vendorId));
+  });
+}
+
+function updateCompareButton() {
+  const btn = document.getElementById('compareFloatBtn');
+  if (!btn) return;
+  const n = state.compare.size;
+  if (n >= 2) {
+    btn.textContent = `${t('compare_open')} (${n}) ↗`;
+    btn.classList.remove('hidden');
+    btn.disabled = false;
+  } else {
+    btn.classList.add('hidden');
+  }
+}
+
+function openCompareDrawer() {
+  const drawer = document.getElementById('compareDrawer');
+  const backdrop = document.getElementById('compareBackdrop');
+  if (!drawer) return;
+  fillCompareDrawer();
+  drawer.classList.remove('hidden');
+  backdrop.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCompareDrawer() {
+  const drawer = document.getElementById('compareDrawer');
+  const backdrop = document.getElementById('compareBackdrop');
+  if (!drawer) return;
+  drawer.classList.add('hidden');
+  backdrop.classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+function fillCompareDrawer() {
+  const vendors = [...state.compare].map(id => state.vendors.find(v => v.id === id)).filter(Boolean);
+  const lang = state.lang;
+  const get = (obj) => (obj && (obj[lang] || obj.en)) || '—';
+
+  const title = document.getElementById('compareDrawerTitle');
+  if (title) title.textContent = t('compare_drawer_title') || 'Vendor Comparison';
+
+  const body = document.getElementById('compareDrawerBody');
+  if (!body) return;
+
+  const ROWS = [
+    { key: 'name',       label: t('col_company') || 'Company',   render: v => v.name },
+    { key: 'physics',    label: t('col_physics') || 'Physics',   render: v => t('physics_' + v.physics) || v.physics },
+    { key: 'stack',      label: t('col_stack') || 'Stack',       render: v => v.stack.map(s => t('stack_' + s) || s).join(', ') },
+    { key: 'region',     label: t('col_region') || 'Country',    render: v => countryLabel(v) },
+    { key: 'founded',    label: t('col_founded') || 'Founded',   render: v => v.founded },
+    { key: 'ticker',     label: t('col_stock') || 'Stock',       render: v => v.ticker || '—' },
+    { key: 'milestone',  label: t('milestone') || 'Milestone',   render: v => get(v.milestone) },
+    { key: 'desc',       label: 'Description',                   render: v => get(v.desc) },
+  ];
+
+  body.innerHTML = `
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th class="compare-field-col"></th>
+          ${vendors.map(v => `<th><span class="compare-vendor-name">${v.name}</span></th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${ROWS.map(row => `
+          <tr>
+            <td class="compare-label">${row.label}</td>
+            ${vendors.map(v => `<td class="compare-cell">${row.render(v)}</td>`).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function bindCompareEvents() {
+  // Float button
+  const floatBtn = document.getElementById('compareFloatBtn');
+  if (floatBtn) floatBtn.addEventListener('click', openCompareDrawer);
+
+  // Close button and backdrop
+  const closeBtn = document.getElementById('compareDrawerClose');
+  if (closeBtn) closeBtn.addEventListener('click', closeCompareDrawer);
+  const backdrop = document.getElementById('compareBackdrop');
+  if (backdrop) backdrop.addEventListener('click', closeCompareDrawer);
+
+  // Esc key (added to existing keydown listener in bindEvents)
 }
 
 /* ---------- Go ---------- */
