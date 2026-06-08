@@ -9,7 +9,7 @@ const state = {
   lang: localStorage.getItem('qvt-lang') || 'en',
   theme: localStorage.getItem('qvt-theme') || 'dark',
   view: localStorage.getItem('qvt-view') || 'card',
-  filters: { physics: new Set(), stack: new Set(), region: new Set(), trading: new Set(), era: new Set(), clouds: new Set(), operatingTemp: new Set() },
+  filters: { physics: new Set(), stack: new Set(), region: new Set(), trading: new Set(), era: new Set(), clouds: new Set(), operatingTemp: new Set(), qubitTier: new Set() },
   search: '',
   sort: 'name',
   lastUpdated: '',
@@ -25,10 +25,19 @@ const STACK_OPTIONS   = ['full','qubit','control','software','cloud'];
 const REGION_OPTIONS  = ['americas','asia','europe','oceania','africa'];
 const TRADING_OPTIONS = ['public','private'];
 const ERA_OPTIONS     = ['legacy','modern','recent'];
-const CLOUD_OPTIONS   = ['aws-braket','azure-quantum','google-cloud','ibm-cloud','proprietary','on-premise'];
-const TEMP_OPTIONS    = ['dilution','mild-cryo','room','na'];
+const CLOUD_OPTIONS      = ['aws-braket','azure-quantum','google-cloud','ibm-cloud','proprietary','on-premise'];
+const TEMP_OPTIONS       = ['dilution','mild-cryo','room','na'];
+const QUBIT_TIER_OPTIONS = ['small','medium','large','xlarge','na'];
 
 // Derive bucket keys from vendor properties for filters that aren't direct fields.
+function qubitTierOf(vendor) {
+  const n = vendor.qubitCount;
+  if (n == null) return 'na';
+  if (n < 50)   return 'small';
+  if (n < 500)  return 'medium';
+  if (n < 5000) return 'large';
+  return 'xlarge';
+}
 function eraOf(vendor) {
   if (vendor.founded <= 2009) return 'legacy';
   if (vendor.founded <= 2017) return 'modern';
@@ -124,6 +133,9 @@ function buildFilters() {
 
   const tempBox = document.getElementById('filter-operatingTemp');
   if (tempBox) TEMP_OPTIONS.forEach(t => appendIfNotNull(tempBox, makeItem('operatingTemp', t)));
+
+  const qubitBox = document.getElementById('filter-qubitTier');
+  if (qubitBox) QUBIT_TIER_OPTIONS.forEach(q => appendIfNotNull(qubitBox, makeItem('qubitTier', q)));
 }
 
 function onFilterChange(e) {
@@ -277,6 +289,7 @@ function getFiltered() {
     if (filters.era.size && !filters.era.has(eraOf(v))) return false;
     if (filters.clouds.size && !v.clouds?.some(c => filters.clouds.has(c))) return false;
     if (filters.operatingTemp.size && !filters.operatingTemp.has(v.operatingTemp)) return false;
+    if (filters.qubitTier.size && !filters.qubitTier.has(qubitTierOf(v))) return false;
     if (search) {
       const desc = (v.desc[state.lang] || '').toLowerCase();
       const milestone = (v.milestone[state.lang] || '').toLowerCase();
