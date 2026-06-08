@@ -103,7 +103,12 @@
     "clouds_google-cloud": "Google Cloud",
     "clouds_ibm-cloud": "IBM Cloud",
     "clouds_proprietary": "Proprietary",
-    "clouds_on-premise": "On-premise"
+    "clouds_on-premise": "On-premise",
+    "operatingTemp": "Operating temperature",
+    "operatingTemp_dilution": "Dilution (~mK)",
+    "operatingTemp_mild-cryo": "Mild cryo (~K)",
+    "operatingTemp_room": "Room temp",
+    "operatingTemp_na": "N/A"
   },
   "zh": {
     "title": "量子電腦廠商地圖",
@@ -209,6 +214,11 @@
     "clouds_google-cloud": "Google Cloud",
     "clouds_ibm-cloud": "IBM Cloud",
     "clouds_proprietary": "自家雲端",
-    "clouds_on-premise": "本地部署"
+    "clouds_on-premise": "本地部署",
+    "operatingTemp": "操作溫度",
+    "operatingTemp_dilution": "稀釋冷凍 (~mK)",
+    "operatingTemp_mild-cryo": "輕度低溫 (~K)",
+    "operatingTemp_room": "室溫",
+    "operatingTemp_na": "不適用"
   }
 }

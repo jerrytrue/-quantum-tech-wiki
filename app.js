@@ -9,7 +9,7 @@ const state = {
   lang: localStorage.getItem('qvt-lang') || 'en',
   theme: localStorage.getItem('qvt-theme') || 'dark',
   view: localStorage.getItem('qvt-view') || 'card',
-  filters: { physics: new Set(), stack: new Set(), region: new Set(), trading: new Set(), era: new Set(), clouds: new Set() },
+  filters: { physics: new Set(), stack: new Set(), region: new Set(), trading: new Set(), era: new Set(), clouds: new Set(), operatingTemp: new Set() },
   search: '',
   sort: 'name',
   lastUpdated: '',
@@ -26,6 +26,7 @@ const REGION_OPTIONS  = ['americas','asia','europe','oceania','africa'];
 const TRADING_OPTIONS = ['public','private'];
 const ERA_OPTIONS     = ['legacy','modern','recent'];
 const CLOUD_OPTIONS   = ['aws-braket','azure-quantum','google-cloud','ibm-cloud','proprietary','on-premise'];
+const TEMP_OPTIONS    = ['dilution','mild-cryo','room','na'];
 
 // Derive bucket keys from vendor properties for filters that aren't direct fields.
 function eraOf(vendor) {
@@ -120,6 +121,9 @@ function buildFilters() {
 
   const cloudsBox = document.getElementById('filter-clouds');
   if (cloudsBox) CLOUD_OPTIONS.forEach(c => appendIfNotNull(cloudsBox, makeItem('clouds', c)));
+
+  const tempBox = document.getElementById('filter-operatingTemp');
+  if (tempBox) TEMP_OPTIONS.forEach(t => appendIfNotNull(tempBox, makeItem('operatingTemp', t)));
 }
 
 function onFilterChange(e) {
@@ -272,6 +276,7 @@ function getFiltered() {
     if (filters.trading.size && !filters.trading.has(tradingOf(v))) return false;
     if (filters.era.size && !filters.era.has(eraOf(v))) return false;
     if (filters.clouds.size && !v.clouds?.some(c => filters.clouds.has(c))) return false;
+    if (filters.operatingTemp.size && !filters.operatingTemp.has(v.operatingTemp)) return false;
     if (search) {
       const desc = (v.desc[state.lang] || '').toLowerCase();
       const milestone = (v.milestone[state.lang] || '').toLowerCase();
