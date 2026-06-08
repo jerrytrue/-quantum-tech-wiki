@@ -96,7 +96,14 @@
     "col_stock": "Stock",
     "col_founded": "Est.",
     "col_milestone": "Latest Milestone",
-    "col_news": "📰"
+    "col_news": "📰",
+    "clouds": "Cloud platform",
+    "clouds_aws-braket": "AWS Braket",
+    "clouds_azure-quantum": "Azure Quantum",
+    "clouds_google-cloud": "Google Cloud",
+    "clouds_ibm-cloud": "IBM Cloud",
+    "clouds_proprietary": "Proprietary",
+    "clouds_on-premise": "On-premise"
   },
   "zh": {
     "title": "量子電腦廠商地圖",
@@ -195,6 +202,13 @@
     "col_stock": "股價",
     "col_founded": "成立",
     "col_milestone": "最新里程碑",
-    "col_news": "📰"
+    "col_news": "📰",
+    "clouds": "雲端平台",
+    "clouds_aws-braket": "AWS Braket",
+    "clouds_azure-quantum": "Azure Quantum",
+    "clouds_google-cloud": "Google Cloud",
+    "clouds_ibm-cloud": "IBM Cloud",
+    "clouds_proprietary": "自家雲端",
+    "clouds_on-premise": "本地部署"
   }
 }

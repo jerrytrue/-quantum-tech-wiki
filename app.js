@@ -9,7 +9,7 @@ const state = {
   lang: localStorage.getItem('qvt-lang') || 'en',
   theme: localStorage.getItem('qvt-theme') || 'dark',
   view: localStorage.getItem('qvt-view') || 'card',
-  filters: { physics: new Set(), stack: new Set(), region: new Set(), trading: new Set(), era: new Set() },
+  filters: { physics: new Set(), stack: new Set(), region: new Set(), trading: new Set(), era: new Set(), clouds: new Set() },
   search: '',
   sort: 'name',
   lastUpdated: '',
@@ -25,6 +25,7 @@ const STACK_OPTIONS   = ['full','qubit','control','software','cloud'];
 const REGION_OPTIONS  = ['americas','asia','europe','oceania','africa'];
 const TRADING_OPTIONS = ['public','private'];
 const ERA_OPTIONS     = ['legacy','modern','recent'];
+const CLOUD_OPTIONS   = ['aws-braket','azure-quantum','google-cloud','ibm-cloud','proprietary','on-premise'];
 
 // Derive bucket keys from vendor properties for filters that aren't direct fields.
 function eraOf(vendor) {
@@ -88,6 +89,10 @@ function buildFilters() {
     if (key === 'stack') return v.stack.includes(val);
     if (key === 'trading') return tradingOf(v) === val;
     if (key === 'era') return eraOf(v) === val;
+    if (key === 'clouds') return (v.clouds || []).includes(val);
+    if (key === 'operatingTemp') return v.operatingTemp === val;
+    if (key === 'qubitTier') return qubitTierOf(v) === val;
+    if (key === 'applications') return (v.applications || []).includes(val);
     return v[key] === val;
   }).length;
 
@@ -112,6 +117,9 @@ function buildFilters() {
   REGION_OPTIONS.forEach(r => appendIfNotNull(regionBox, makeItem('region', r)));
   if (tradingBox) TRADING_OPTIONS.forEach(t => appendIfNotNull(tradingBox, makeItem('trading', t)));
   if (eraBox)     ERA_OPTIONS.forEach(e => appendIfNotNull(eraBox, makeItem('era', e)));
+
+  const cloudsBox = document.getElementById('filter-clouds');
+  if (cloudsBox) CLOUD_OPTIONS.forEach(c => appendIfNotNull(cloudsBox, makeItem('clouds', c)));
 }
 
 function onFilterChange(e) {
@@ -263,6 +271,7 @@ function getFiltered() {
     if (filters.region.size && !filters.region.has(v.region)) return false;
     if (filters.trading.size && !filters.trading.has(tradingOf(v))) return false;
     if (filters.era.size && !filters.era.has(eraOf(v))) return false;
+    if (filters.clouds.size && !v.clouds?.some(c => filters.clouds.has(c))) return false;
     if (search) {
       const desc = (v.desc[state.lang] || '').toLowerCase();
       const milestone = (v.milestone[state.lang] || '').toLowerCase();
