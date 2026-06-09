@@ -40,20 +40,30 @@
           <button id="clearFilters" class="reset-btn" data-i18n-title="reset">↺</button>
         </div>
 
-        <h3 data-i18n="physics">Physics Technology</h3>
-        <div id="filter-physics" class="filter-group"></div>
+        <section class="filter-section" data-section="physics">
+          <h3 data-i18n="physics">Physics Technology <span class="filter-chevron">▾</span></h3>
+          <div id="filter-physics" class="filter-group"></div>
+        </section>
 
-        <h3 data-i18n="stack">Stack Level</h3>
-        <div id="filter-stack" class="filter-group"></div>
+        <section class="filter-section" data-section="stack">
+          <h3 data-i18n="stack">Stack Level <span class="filter-chevron">▾</span></h3>
+          <div id="filter-stack" class="filter-group"></div>
+        </section>
 
-        <h3 data-i18n="region">Region</h3>
-        <div id="filter-region" class="filter-group"></div>
+        <section class="filter-section collapsed" data-section="region">
+          <h3 data-i18n="region">Region <span class="filter-chevron">▸</span></h3>
+          <div id="filter-region" class="filter-group"></div>
+        </section>
 
-        <h3 data-i18n="trading">Trading status</h3>
-        <div id="filter-trading" class="filter-group"></div>
+        <section class="filter-section collapsed" data-section="trading">
+          <h3 data-i18n="trading">Trading status <span class="filter-chevron">▸</span></h3>
+          <div id="filter-trading" class="filter-group"></div>
+        </section>
 
-        <h3 data-i18n="era">Founded era</h3>
-        <div id="filter-era" class="filter-group"></div>
+        <section class="filter-section collapsed" data-section="era">
+          <h3 data-i18n="era">Founded era <span class="filter-chevron">▸</span></h3>
+          <div id="filter-era" class="filter-group"></div>
+        </section>
 
         <h3 data-i18n="clouds">Cloud platform</h3>
         <div id="filter-clouds" class="filter-group"></div>
@@ -89,11 +99,17 @@
         </div>
       </div>
 
+      <div class="preset-row">
+        <span class="preset-label" data-i18n="presets">Presets</span>
+        <div id="presetChips" class="preset-chips"></div>
+      </div>
+
       <div id="cardView" class="card-grid"></div>
       <div id="tableView" class="table-wrap hidden">
         <table class="vendor-table">
           <thead>
             <tr>
+              <th class="compare-th"></th>
               <th data-sort="name"   data-i18n="col_company">Company</th>
               <th data-sort="physics" data-i18n="col_physics">Physics</th>
               <th data-sort="stack"  data-i18n="col_stack">Stack</th>
@@ -212,6 +228,19 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ============= COMPARE: float button, backdrop, drawer ============= -->
+  <button id="compareFloatBtn" class="compare-float-btn hidden" data-i18n="compare_open">Compare ↗</button>
+
+  <div id="compareBackdrop" class="compare-backdrop hidden"></div>
+
+  <div id="compareDrawer" class="compare-drawer hidden" role="dialog" aria-modal="true">
+    <div class="compare-drawer-header">
+      <h2 id="compareDrawerTitle" data-i18n="compare_drawer_title">Vendor Comparison</h2>
+      <button id="compareDrawerClose" class="compare-drawer-close" data-i18n="compare_close">✕ Close</button>
+    </div>
+    <div id="compareDrawerBody" class="compare-drawer-body"></div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

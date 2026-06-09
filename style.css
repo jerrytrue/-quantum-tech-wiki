@@ -182,14 +182,22 @@ body {
   border-color: var(--accent-pink);
   color: var(--accent-pink);
 }
-.filter-block h3 {
+.filter-section h3 {
   margin: 18px 0 6px 0;
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
   border-left: 3px solid var(--accent);
   padding-left: 8px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
+.filter-section h3:hover { color: var(--accent); }
+.filter-chevron { font-size: 10px; color: var(--text-dim); flex-shrink: 0; }
+.filter-section.collapsed .filter-group { display: none; }
 .filter-group {
   display: flex;
   flex-direction: column;
@@ -353,6 +361,56 @@ body {
   font-weight: 700;
 }
 
+/* ---------- Preset chips ---------- */
+.preset-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.preset-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.preset-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.preset-chip {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.preset-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(124, 92, 255, 0.08);
+}
+.preset-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.preset-clear {
+  border-style: dashed;
+}
+.preset-clear:hover {
+  border-color: var(--accent-pink);
+  color: var(--accent-pink);
+}
+
 /* ---------- Card View ---------- */
 .card-grid {
   display: grid;
@@ -480,16 +538,17 @@ body {
 /* Headers must stay on one line — table-layout: fixed otherwise vertical-stacks the letters */
 .vendor-table th { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Column widths — 8 columns: Company, Physics, Stack, Region, Stock, Est., Milestone, News */
-/* Stock bumped 6→12% so chip text doesn't bleed into Founded; taken from Stack, Milestone, Stack */
-.vendor-table th:nth-child(1), .vendor-table td:nth-child(1) { width: 14%; }                                          /* Company */
-.vendor-table th:nth-child(2), .vendor-table td:nth-child(2) { width: 15%; }                                          /* Physics */
-.vendor-table th:nth-child(3), .vendor-table td:nth-child(3) { width: 14%; }                                          /* Stack */
-.vendor-table th:nth-child(4), .vendor-table td:nth-child(4) { width: 9%;  }                                          /* Region */
-.vendor-table th:nth-child(5), .vendor-table td:nth-child(5) { width: 12%; }                                          /* Stock */
-.vendor-table th:nth-child(6), .vendor-table td:nth-child(6) { width: 7%;  text-align: center; white-space: nowrap; } /* Est. */
-.vendor-table th:nth-child(7), .vendor-table td:nth-child(7) { width: 19%; font-size: 12px; color: var(--text-dim); line-height: 1.4; } /* Milestone */
-.vendor-table th:nth-child(8), .vendor-table td:nth-child(8) { width: 10%; text-align: center; padding-left: 4px; padding-right: 4px; } /* News */
+/* Column widths — 9 columns: Compare, Company, Physics, Stack, Region, Stock, Est., Milestone, News */
+/* Stock bumped 6→12% vs original; compare cb col is thin fixed width */
+.vendor-table th:nth-child(1), .vendor-table td:nth-child(1) { width: 32px; padding: 0 4px; }                         /* Compare cb */
+.vendor-table th:nth-child(2), .vendor-table td:nth-child(2) { width: 14%; }                                          /* Company */
+.vendor-table th:nth-child(3), .vendor-table td:nth-child(3) { width: 15%; }                                          /* Physics */
+.vendor-table th:nth-child(4), .vendor-table td:nth-child(4) { width: 13%; }                                          /* Stack */
+.vendor-table th:nth-child(5), .vendor-table td:nth-child(5) { width: 9%;  }                                          /* Region */
+.vendor-table th:nth-child(6), .vendor-table td:nth-child(6) { width: 12%; }                                          /* Stock */
+.vendor-table th:nth-child(7), .vendor-table td:nth-child(7) { width: 7%;  text-align: center; white-space: nowrap; } /* Est. */
+.vendor-table th:nth-child(8), .vendor-table td:nth-child(8) { width: 18%; font-size: 12px; color: var(--text-dim); line-height: 1.4; } /* Milestone */
+.vendor-table th:nth-child(9), .vendor-table td:nth-child(9) { width: 8%;  text-align: center; padding-left: 4px; padding-right: 4px; } /* News */
 
 /* Stock price chips */
 .chip-stock {
@@ -549,6 +608,154 @@ body {
   vertical-align: super;
 }
 .vendor-table .table-name-link:hover .ext-icon { color: var(--accent-2); }
+
+/* ---------- Compare mode ---------- */
+.compare-float-btn {
+  position: fixed;
+  bottom: 130px; /* above the RSS strip */
+  right: 24px;
+  z-index: 200;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(124,92,255,0.5);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.compare-float-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124,92,255,0.65);
+}
+.compare-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(3px);
+  z-index: 300;
+  animation: fadeIn 0.2s ease;
+}
+.compare-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 600px;
+  max-width: 80vw;
+  height: 100vh;
+  background: var(--bg-elev);
+  border-left: 1px solid var(--border);
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.25s cubic-bezier(0.16,1,0.3,1);
+  overflow: hidden;
+}
+.compare-drawer.hidden { display: none; }
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.compare-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.compare-drawer-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+.compare-drawer-close {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+.compare-drawer-close:hover {
+  border-color: var(--accent-pink);
+  color: var(--accent-pink);
+}
+.compare-drawer-body {
+  overflow-y: auto;
+  padding: 20px 24px;
+  flex: 1;
+}
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.compare-table th, .compare-table td {
+  padding: 9px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  word-wrap: break-word;
+}
+.compare-field-col { width: 110px; }
+.compare-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.compare-vendor-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent-2);
+}
+.compare-cell { color: var(--text); line-height: 1.45; }
+
+/* Vendor selected state */
+.vendor-card.compare-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(124,92,255,0.25), var(--shadow);
+}
+.vendor-table tr.compare-selected td { background: rgba(124,92,255,0.06); }
+
+/* Compare checkbox in cards */
+.card-header-right {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.compare-checkbox-wrap {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.compare-checkbox-wrap input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Compare checkbox column in table */
+.compare-th { width: 32px; padding: 0 4px; }
+.compare-cb-cell { width: 32px; padding: 0 4px; text-align: center; }
+.compare-cb-cell input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+}
 
 /* ---------- Footer ---------- */
 .footer {
